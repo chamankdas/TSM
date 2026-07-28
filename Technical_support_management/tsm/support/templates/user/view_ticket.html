@@ -1,0 +1,192 @@
+{% extends "user/base.html" %}
+
+{% load filename_filters %}
+
+{% block content %}
+
+<div class="bg-white flex flex-1 w-full h-full">
+    <div
+        class="{% if ticket.assign_to and comments %}w-5/12  border-x border-gray-600 {% else %}w-full  flex justify-between{% endif %}   ">
+        <div class="flex flex-col w-full">
+            <div class="px-[7%] py-3 flex flex-1 bg-purple-500">
+                <div class="flex flex-1">
+                    <h2 class="font-bold text-xl text-white">Ticket</h2>
+                    <h2 class="mx-3 px-3 bg-slate-200 font-bold text-gray-900 text-xl">#{{ticket.id}}</h2>
+                </div>
+
+            </div>
+            <div class="px-[10%] py-3 flex flex-1 ">
+                <div class="flex flex-1 justify-start">
+                    <h2 class="font-bold px-1">Status-</h2>
+                    <h2 class="px-2 bg-slate-400 font-bold text-white">{{ticket.status}}</h2>
+                </div>
+                <div class=" flex flex-1 justify-center ">
+                    <h2 class="px-1 font-bold">Priority-</h2>
+                    <h2 class="px-2 font-bold bg-slate-400 text-white">{{ticket.priority}}</h2>
+                </div>
+                <div class=" flex flex-1 justify-end ">
+                    <h2 class="px-1 font-bold">Type-</h2>
+                    <h2 class="px-2 font-bold bg-slate-400 text-white">{{ticket.problem_type}}</h2>
+                </div>
+            </div>
+            <div class="">
+                <div class="flex flex-col">
+                    <div class="mb-2 px-[10%] pt-3 flex flex-1 justify-between ">
+                        <h3 class=" pr-5 font-bold">Subject</h3>
+                    </div>
+                    <div class="px-[10%] pb-1 flex flex-1 ">
+                        <h2 class="py-2 px-2 flex flex-1 bg-white border rounded whitespace-pre-line shadow">{{ticket.title}}</h2>
+                    </div>
+                    <div class="px-[10%] pt-3 flex flex-1 justify-between">
+                        <h3 class="pr-5 font-bold">Description</h3>
+                    </div>
+                    <div class="px-[10%] mb-3 flex flex-1 ">
+                        <h2
+                            class=" flex flex-1 bg-white px-2 my-1 border rounded h-[245px] top-0 overflow-y-auto shadow whitespace-pre-line">{{ticket.description}}</h2>
+                    </div>
+
+                    {% if attachments %}
+                    <div class="px-[10%] pt-2 flex flex-1 justify-between ">
+                        <h3 class=" pr-5 font-bold">Attachment</h3>
+                    </div>
+                    <div class="px-[11%] py-2 ">
+                        {% for attachment in attachments %}
+                        <li><a href="{{attachment.file.url}}" target="_blank"
+                                class="text-blue-400 hover:underline">{{attachment.file.name}}</a></li>
+                        {% endfor %}
+                    </div>
+                    {% endif %}
+                    <div class="px-[10%] mb-2 flex flex-1 justify-between">
+                        <h3 class="  text-sm pr-5 font-bold">created at </h3>
+                        <h3 class="px-5 py-2 text-sm pr-5 bg-[#EDE9FE] shadow font-bold">{{ticket.created_at}} </h3>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div
+        class="{% if ticket.assign_to and comments %}w-7/12 h-[675px] overflow-y-scroll {% else %}hidden{% endif %}  ">
+        <div class="px-[4%] py-3 flex flex-1 bg-purple-500 top-0 sticky">
+            <div class="flex flex-1">
+                <h2 class="font-bold text-xl text-white">Chat with Specialist ({{ticket.assign_to.username}})
+                </h2>
+                {% if closed_ticket %}
+                <div class=" flex flex-1 justify-end">
+                    <a href="{% url 'reopen_ticket' ticket.id %}"
+                        class="px-5  bg-red-500 text-xl text-white font-semibold rounded ">Reopen Ticket</a>
+                </div>
+                {% endif %}
+            </div>
+        </div>
+        <div class="w-full min-h-screen">
+            {% if ticket.assign_to and comments %}
+            <div class="flex flex-col w-full ">
+                <div class=" pt-5 mx-10">
+                    {% for comment in comments %}
+                    {% if comment.user == request.user %}
+                    <div class="w-full flex  justify-end">
+
+                        <div class="flex flex-col">
+                            {% if comment.file %}
+                            <a href="{{comment.file.url}}" target="_blank"
+                                class="text-blue-400 hover:underline">{{comment.file.name|basename}}</a>
+                            {% endif %}
+                            {% if comment.content %}
+                            <p class="px-5 py-1 mt-2 rounded bg-sky-100 whitespace-pre-line">{{ comment.content }}</p>
+                            {% endif %}
+                        </div>
+                    </div>
+                    <span class="text-sm text-gray-600 flex justify-end mb-5">{{ comment.created_at|date:"d F Y" }}</span>
+                    {% else %}
+                    <div class=" mb-3 flex flex-col max-w-[80%] justify-start mb-3">
+                        <h2 class="px-3 py-1 bg-rose-300 rounded-full self-start">{{comment.user.username|slice:":1"|upper}}</h2>
+                        <div class="flex flex-col self-start ml-8 ">
+                            {% if comment.file %}
+                            <a href="{{comment.file.url}}" target="_blank"
+                                class="text-blue-400 hover:underline py-2">{{comment.file.name|basename}}</a>
+                            {% endif %}
+                            {% if comment.content %}
+                            <p class="px-5 py-1 rounded bg-sky-100 whitespace-pre-line ">{{comment.content}}</p>
+                            {% endif %}
+                            <span class="flex  pt-1 text-sm text-gray-600  justify-end">{{comment.created_at|date:"d F Y"}}</span>
+                        </div>
+                    </div>
+                    {% endif %}
+                    {% endfor %}
+
+                </div>
+            </div>
+            {% endif %}
+        </div>
+        {% if progress %}
+        <div class="px-5  bottom-0 sticky">
+            <form action="{% url 'comment' ticket.id %}" method="post" enctype="multipart/form-data" class="pb-2 ">
+                {% csrf_token %}
+                <div class="flex flex-col">
+                    <div id="previewArea"
+                        class="border border-gray-300 px-3 pt-3 rounded-md hidden bg-white flex flex-row  self-start">
+                        <p class="mb-2 text-sm font-medium hidden" id="p">Selected file: </p>
+                        <a href="" class=" pl-2" target="_blank" id="preview"></a>
+                    </div>
+                    <div class="flex flex-1">
+                        <div class="flex flex-1 border border-gray-200 rounded-lg bg-white items-center">
+                            <div class=" ml-3 px-3 bg-slate-100 rounded-full">
+                                <label for="file" class="text-xl">+</label>
+                                <input type="file" name="file" id="file" class="hidden" onchange="preview(this)">
+                            </div>
+                            <textarea name="comment" placeholder="Write your issues"
+                                oninput="this.style.height = 'auto'; this.style.height = this.scrollHeight + 'px';"
+                                class="flex flex-1 pl-5  py-1 focus:outline-none focus:ring-0 min-h-[10px] max-h-[200px] "></textarea>
+                        </div>
+                        <button type="submit"
+                            class="px-[2%] font-bold hover:bg-indigo-400 hover:text-white rounded-lg justify-center items-center ">
+                            <svg xmlns="http://www.w3.org/2000/svg" fill="black" viewBox="0 0 24 24" stroke-width="1.5"
+                                stroke="currentColor" class="size-6">
+                                <path stroke-linecap="round" stroke-linejoin="round"
+                                    d="M6 12 3.269 3.125A59.769 59.769 0 0 1 21.485 12 59.768 59.768 0 0 1 3.27 20.875L5.999 12Zm0 0h7.5" />
+                            </svg>
+
+                        </button>
+                    </div>
+                </div>
+            </form>
+        </div>
+        {% endif %}
+    </div>
+</div>
+<script>
+    function preview(input) {
+        const file = input.files[0];
+        if (!file) return;
+
+        const area = document.getElementById("previewArea");
+        const box = document.getElementById("preview");
+        const p = document.getElementById("p");
+
+        area.classList.remove("hidden");
+        box.innerHTML = "";
+
+        const url = URL.createObjectURL(file);
+
+        // Image preview
+        if (file.type.startsWith("image/")) {
+            const img = document.createElement("img");
+            img.src = url;
+            img.className = "max-h-48 rounded-md mb-2";
+            box.appendChild(img);
+        }
+
+        // Link to open file
+        const link = document.createElement("a");
+        link.href = url;
+        link.target = "_blank";
+        link.className = "text-blue-600 flex items-center text-sm";
+        if (!file.type.startsWith("image/")){
+            link.textContent = file.name;
+            p.classList.remove("hidden");
+        }
+        box.appendChild(link);
+    }
+</script>
+{% endblock %}

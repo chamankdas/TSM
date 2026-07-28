@@ -1,0 +1,38 @@
+{% extends "user/base.html" %}
+
+{% load widget_tweaks %}
+
+{% block content %}
+
+<div class="h-screen px-[20%] bg-rose-200 py-5">
+    <h2 class="text-3xl font-bold flex justify-center">Create Ticket</h2>
+    <form action="{% url 'raised_ticket' %}" method="post" class="flex flex-col mt-5 " enctype="multipart/form-data">
+        {% csrf_token %}
+        <div class="flex flex-col mb-5">
+            <label for="" class="mb-1">Type</label>
+            <select name="type" class="px-5 py-2  bg-white rounded">
+                <option value="" selected disabled>Choose Problem Type</option>
+                <option value="support">Support</option>
+                <option value="technical" >Technical</option>
+                <option value="sells" >Sells</option>
+                <option value="deployment" >Deployment</option>
+            </select>
+        </div>
+        <div class="flex flex-col mb-5">
+            <label for="title" class="mb-1">Subject</label>
+            <input type="text" name="title" id="title" class="py-2 bg-white rounded px-5">
+        </div>
+        <div class="flex flex-col mb-5">
+            <label for="description" class="mb-1">Description</label>
+            <textarea name="description" id="description" class="py-2 px-5 min-h-[150px]"></textarea>
+        </div>
+        <div class="flex flex-col mb-5">
+            <label for="attachment" class="mb-1">Attachment (<span class="text-sm">optional</span>)</label>
+            <input type="file" multiple name="attachment" id="attachment">
+        </div>
+        <input type="submit" value="Create Ticket" class="px-4 bg-red-500 rounded py-3 items-center ">
+    </form>
+    
+</div>
+
+{% endblock %}

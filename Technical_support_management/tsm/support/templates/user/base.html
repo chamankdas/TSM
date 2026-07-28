@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Technical Support Management Project</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body>
+    <div class=" px-[10%] flex justify-between items-center border py-4">
+        <div class="font-bold text-xl flex flex-row items-center">
+            <a href="{% url 'user_dashboard' %}" class="bg-indigo-600 text-white px-2 py-1 rounded">TSM</a>
+            <p class="px-2 text-normal">TeachSupport</p>
+
+        </div>
+        <div class="flex justify-between w-80 font-semibold">
+            <a href="{% url 'user_dashboard' %}" class="px-5">Home</a>
+            <a href="" class="px-5">Contact</a>
+            <a href="" class="px-5">About Us</a>
+        </div>
+        <div class=" px-3 flex flex-row gap-5 font-semibold">
+            {% if request.user.is_authenticated %}
+            <h2 class="uppercase px-3 py-1 bg-indigo-600 text-white rounded">{{request.user.username}}</h2>
+            <form action="{% url 'logout' %}" method="post" >
+                {% csrf_token %}
+
+                <input type="submit" value="Logout" class="cursor-pointer px-3 py-1 bg-indigo-600 text-white rounded ">
+            </form>
+            {% else %}
+            <a href="{% url 'login' %}" class="">Login</a>
+            <a href="{% url 'registration' %}" class="text-white px-2 py-1 bg-indigo-600 rounded">SignUp</a>
+            {% endif %}
+
+        </div>
+    </div>
+    <div class="">
+        {% block content %}
+
+        {% endblock %}
+    </div>
+</body>
+</html>

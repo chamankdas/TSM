@@ -1,0 +1,70 @@
+"""
+URL configuration for tsm project.
+
+The `urlpatterns` list routes URLs to views. For more information please see:
+    https://docs.djangoproject.com/en/5.2/topics/http/urls/
+Examples:
+Function views
+    1. Add an import:  from my_app import views
+    2. Add a URL to urlpatterns:  path('', views.home, name='home')
+Class-based views
+    1. Add an import:  from other_app.views import Home
+    2. Add a URL to urlpatterns:  path('', Home.as_view(), name='home')
+Including another URLconf
+    1. Import the include() function: from django.urls import include, path
+    2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
+"""
+from django.contrib import admin
+from django.urls import path
+from support.views import *
+from support.agentviews import *
+from support.adminviews import *
+from django.conf import settings
+from django.conf.urls.static import static
+
+urlpatterns = [
+    path('superadmin/', admin.site.urls),
+
+    # login urls 
+    path("registration/",registration,name="registration"),
+    path("login/",user_login,name="login"),
+    path("logout/",user_logout,name="logout"),
+    path("profile/",profile,name="profile"),
+
+    # user urls 
+    path("",home,name="homepage"),
+    path("dashboard/",user_dashboard,name="user_dashboard"),
+    path("Ticket/New",raise_ticket,name="raised_ticket"),
+    path("all_Ticket/",show_tickets,name="all_tickets"),
+    path("Ticket/view/<int:id>/",view_ticket,name="view_ticket"),
+    path("Ticket/view/comment/<int:id>/",comment,name="comment"),
+    path("Ticket/reopen_ticket/<int:id>/",reopen_ticket,name="reopen_ticket"),
+
+
+    # agent urls
+    path("agent/dashboard",agent_dashboard,name="agent_dashboard"),
+    path("agent/ticket",agent_tickets,name="agent_ticket"),
+    path("agent/ticket/take/<int:id>/",take_ticket,name="take_ticket"),
+    path("agent/ticket/comment/<int:id>/",agent_comment,name="agent_comment"),
+    path("agent/ticket/view/<int:id>/",agent_view_ticket,name="agent_view_ticket"),
+    path("agent/ticket/close/<int:id>/",close_ticket,name="close_ticket"),
+    path("agent/progess_ticket",in_progress_ticket,name="agent_progress_ticket"),
+    path("agent/setting",agent_setting,name="agentsetting"),
+
+    # admin urls
+    path("admin/dashboard/",admin_dashboard,name="admin_dashboard"),
+    path("admin/manage_user/",manageuser,name="manage_customer"),
+    path("admin/manage_agent/",manageAgent,name="admin_agent"),
+    path("admin/manage_ticket/",manageticket,name="admin_ticket"),
+    path("admin/manage_report/",report,name="report"),
+    path("admin/customer/<int:user_id>/",view_user,name="view_customer"),
+    path("admin/agent/<int:agent_id>/",view_agent,name="view_agent"),
+    path("admin/ticket/<int:id>/",admin_view_ticket,name="admin_view_ticket"),
+    path("admin/ticket/<int:id>/comment/",admin_comment,name="admin_comment"),
+    path("admin/ticket/<int:id>/close/",admin_close_ticket,name="admin_close_ticket"),
+    path("admin/ticket/<int:id>/assign_to/",assign_agent,name="assign_agent"),
+    path("admin/ticket/<int:id>/take/",admin_take,name="admin_take"),
+
+]
+
+urlpatterns += static(settings.MEDIA_URL, document_root = settings.MEDIA_ROOT)

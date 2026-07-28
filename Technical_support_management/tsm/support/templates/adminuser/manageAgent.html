@@ -1,0 +1,98 @@
+{% extends "adminuser/base.html" %}
+
+{% block content %}
+
+<div class="h-[670px] w-full overflow-y-auto px-16">
+    <div class="my-16  flex flex-col">
+        <h2 class="text-2xl font-bold text-gray-800">Manage Staffs</h2>
+        <p class="text-gray-600 mt-2">Monitor and assign tickets to staffs </p>
+    </div>
+    <div class="flex flex-1 w-full  mb-5 mt-10">
+        <div class=" flex flex-row w-[350px] px-4 bg-white rounded-lg items-center">
+            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
+                stroke="currentColor" class="size-6 text-gray-500">
+                <path stroke-linecap="round" stroke-linejoin="round"
+                    d="m21 21-5.197-5.197m0 0A7.5 7.5 0 1 0 5.196 5.196a7.5 7.5 0 0 0 10.607 10.607Z" />
+            </svg>
+
+            <input type="text" name="" class="px-6 py-2 focus:outline-none focus:ring-0"
+                placeholder="search by ID,Name .. ">
+        </div>
+        <div class="flex flex-1 justify-end items-center gap-5 rounded-b-lg">
+            <div class=" text-gray-500">
+                <button
+                    class="px-2 py-2 bg-white rounded-lg border hover:bg-blue-400 hover:text-white hover:border-blue-500 ">User ID</button>
+                <button
+                    class="px-2 py-2 bg-white rounded-lg border hover:bg-blue-400 hover:text-white hover:border-blue-500 ">Tickets</button>
+            </div>
+        </div>
+    </div>
+    <div class="flex flex-col bg-white px-8 py-4 rounded-lg ">
+        <h2 class="pb-2 font-bold text-xl text-gray-700">Agents</h2>
+        <div class=" flex flex-1 justify-center border rounded-t-lg ">
+            <table class=" w-full ">
+                <thead>
+                    <tr class=" bg-gray-100 text-gray-700 rounded-lg">
+                        <th class="py-2 px-4 text-left">ID</th>
+                        <th class="py-2 px-2 text-left">Avtar</th>
+                        <th class="py-2 px-2 text-left">Name</th>
+                        <th class="py-2 px-2 text-left">Username</th>
+                        <th class="py-2 px-2 text-left">Email</th>
+                        <th class="py-2 px-2 text-left">Status</th>
+                        <th class="py-2 px-2 text-left">Total Ticket</th>
+                        <th class="py-2 px-2 text-left">Action</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for agent in agents %}
+                    <tr class="border-t border-gray-100 hover:bg-gray-100">
+                        <td class="px-4 py-4 text-gray-700">{{agent.id}}</td>
+                        <td class="">
+                            <h2 class="w-[40px] flex justify-center bg-orange-300 text-white font-bold m-1 rounded-lg px-2 py-2">U</h2>
+                        </td>
+                        <td class="px-2 py-4 text-orange-600 font-semibold">{{agent.username}}</td>
+                        <td class="px-2 py-4 text-gray-700">Mohan</td>
+                        <td class="px-2 py-4 text-gray-700">hi@gmail.com</td>
+                        <td class="px-2 py-4 text-green-600 font-bold">Active</td>
+                        <td class="px-4 py-4 text-gray-700">{{agent.tickets}}</td>
+                        <td class="px-2 py-4 ">
+                            <div class="w-full gap-4 flex flex-row">
+                                <a href="{% url 'view_agent' agent.id %}" class="">
+                                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
+                                        stroke-width="1.5" stroke="currentColor" class="size-5">
+                                        <path stroke-linecap="round" stroke-linejoin="round"
+                                            d="M2.036 12.322a1.012 1.012 0 0 1 0-.639C3.423 7.51 7.36 4.5 12 4.5c4.638 0 8.573 3.007 9.963 7.178.07.207.07.431 0 .639C20.577 16.49 16.64 19.5 12 19.5c-4.638 0-8.573-3.007-9.963-7.178Z" />
+                                        <path stroke-linecap="round" stroke-linejoin="round"
+                                            d="M15 12a3 3 0 1 1-6 0 3 3 0 0 1 6 0Z" />
+                                    </svg>
+
+                                </a>
+                                
+                                <a href="" class=""> 
+                                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
+                                        stroke-width="1.5" stroke="currentColor" class="size-5">
+                                        <path stroke-linecap="round" stroke-linejoin="round" d="M6 18 18 6M6 6l12 12" />
+                                    </svg>
+
+                                </a>
+                            </div>
+                        </td>
+                    </tr>
+                    {% endfor %}
+
+                </tbody>
+            </table>
+        </div>
+        {% if agents %}
+        <div class="flex flex-1 justify-between px-10 py-2 mb-2 items-center bg-gray-100 border rounded-b-lg  ">
+            <h2 class="text-gray-500 text-sm">Showing 6 results</h2>
+            <div class="gap-2 text-gray-500">
+                <button class="px-2 py-1 bg-white rounded-lg border hover:bg-blue-400 hover:text-white hover:border-blue-500 ">Previous</button>
+                <button class="px-2 py-1 bg-white rounded-lg border hover:bg-blue-400 hover:text-white hover:border-blue-500 ">Next</button>
+            </div>
+        </div>
+        {% endif %}
+    </div>
+</div>
+
+{% endblock %}
