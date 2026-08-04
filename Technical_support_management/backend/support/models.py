@@ -1,16 +1,25 @@
 from django.db import models
-from django.contrib.auth.models import AbstractUser
+from django.contrib.auth.models import AbstractBaseUser,BaseUserManager
 from django.conf import settings
 
 # Create your models here.
 
+class CustomUser()
+
+class TicketType(models.Model):
+    title = models.CharField(max_length=20)
+
+    def __str__(self):
+        return self.title
+
 
 class Ticket(models.Model):
     statu_choice = (
-        ('open','open'),
-        ('progress','progress'),
-        ('solved','solved'),
-        ('closed','closed')
+        ('new','new'),
+        ('in progress','in progress'),
+        ('complete','complete'),
+        ('closed','closed'),
+        ('cancelled','cancelled')
     )
 
     priority_choice = (
@@ -20,14 +29,6 @@ class Ticket(models.Model):
         ('urgent','urgent')
     )
 
-    problem_type = (
-        ('support','support'),
-        ('technical','technical'),
-        ('sells','sells'),
-        ('deployment','deployment'),
-    )
-
-    problem_type = models.CharField(max_length=20,choices=problem_type)
     title = models.CharField(max_length=300)
     description = models.TextField()
     created_by = models.ForeignKey(settings.AUTH_USER_MODEL,on_delete=models.CASCADE,related_name="created_ticket")
@@ -50,20 +51,6 @@ class Comment(models.Model):
 
     def __str__(self):
         return f"comment by {self.user.username}"
-    
-class User(AbstractUser):
-    role_choice = (
-        ('customer','customer'),
-        ('agent','agent'),
-        ('senior_agent','senior_agent')
-    )
-    role = models.CharField(max_length=20,choices=role_choice,default="customer")
-    name = models.CharField(max_length=200,null=True,blank=True)
-    phone_no = models.CharField(max_length=15, null=True, blank=True)
-    image = models.ImageField(upload_to="profile/",blank=True,null=True)
-
-    def __str__(self):
-        return f"{self.username} ({self.role})"
     
 class TicketAttachment(models.Model):
     ticket = models.ForeignKey(Ticket, on_delete=models.CASCADE, related_name='attachments')
