@@ -7,6 +7,6 @@ admin.site.site_title ="TSM"
 admin.site.site_header = "Technical Support Management"
 admin.site.index_title = "TSM Site"
 
-admin.site.register(User)
+admin.site.register(CustomUser)
 admin.site.register(Ticket)
 admin.site.register(Comment)

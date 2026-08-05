@@ -3,15 +3,15 @@ from django.shortcuts import render, redirect,get_object_or_404
 from django.contrib.auth.decorators import login_required
 from itertools import chain
 
-from .models import User,Ticket,Comment
+from .models import CustomUser,Ticket,Comment
 from .decorators import permission_check
 
 
 @login_required
 @permission_check(role="senior_agent")
 def admin_dashboard(request):
-    customer = User.objects.filter(role="customer")
-    agent = User.objects.filter(role="agent")
+    customer = CustomUser.objects.filter(role="customer")
+    agent = CustomUser.objects.filter(role="agent")
 
     tickets = Ticket.objects.all()
     open_tickets = tickets.filter(status = "open")[:15]
@@ -59,7 +59,7 @@ def manageticket(request):
 @login_required
 @permission_check(role="senior_agent")
 def manageuser(request):
-    customers = User.objects.filter(role="customer")
+    customers = CustomUser.objects.filter(role="customer")
     
     for customer in customers:
         total_tickets = Ticket.objects.filter(created_by = customer)
@@ -77,8 +77,8 @@ def manageuser(request):
 @login_required
 @permission_check(role="senior_agent")
 def view_user(request,user_id):
-    customer = User.objects.get(id=user_id)
-    agents = User.objects.filter(role="agent")
+    customer = CustomUser.objects.get(id=user_id)
+    agents = CustomUser.objects.filter(role="agent")
 
     tickets = Ticket.objects.filter(created_by=customer)
     open_tickets = tickets.filter(status="open")
@@ -157,7 +157,7 @@ def report(request):
 @login_required
 @permission_check(role="senior_agent")
 def manageAgent(request):
-    agents = User.objects.filter(role="agent")
+    agents = CustomUser.objects.filter(role="agent")
 
     for agent in agents:
         tickets = Ticket.objects.filter(assign_to = agent)
@@ -175,7 +175,7 @@ def manageAgent(request):
 @login_required
 @permission_check(role="senior_agent")
 def view_agent(request,agent_id):
-    agent = User.objects.get(id=agent_id)
+    agent = CustomUser.objects.get(id=agent_id)
 
     tickets = Ticket.objects.filter(assign_to = agent)
 
@@ -201,7 +201,7 @@ def assign_agent(request,id):
     if request.method == "POST":
         assign_to = request.POST.get("userId")
         if assign_to :
-            agent = get_object_or_404(User,id=assign_to)
+            agent = get_object_or_404(CustomUser,id=assign_to)
             ticket.assign_to = agent
             ticket.status = "progress"
 

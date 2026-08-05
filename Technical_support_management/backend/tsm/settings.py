@@ -42,7 +42,7 @@ INSTALLED_APPS = [
     "django.contrib.humanize",
 ]
 
-AUTH_USER_MODEL = 'support.User'
+AUTH_USER_MODEL = 'support.CustomUser'
 
 
 MIDDLEWARE = [
@@ -80,8 +80,13 @@ WSGI_APPLICATION = 'tsm.wsgi.application'
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
+        # 'ENGINE': 'django.db.backends.sqlite3',
+        'ENGINE': 'django.db.backends.postgresql',
+        'NAME': 'tsm_db',
+        'USER':'chaman',
+        'PASSWORD':'Hihello@123',
+        'HOST':'localhost',
+        'PORT':'5432',
     }
 }
 
