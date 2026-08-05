@@ -40,6 +40,7 @@ INSTALLED_APPS = [
     "support",
     "widget_tweaks",
     "django.contrib.humanize",
+    "rest_framework"
 ]
 
 AUTH_USER_MODEL = 'support.CustomUser'
@@ -56,6 +57,15 @@ MIDDLEWARE = [
 ]
 
 ROOT_URLCONF = 'tsm.urls'
+
+
+REST_FRAMEWORK = {
+    # Use Django's standard `django.contrib.auth` permissions,
+    # or allow read-only access for unauthenticated users.
+    "DEFAULT_PERMISSION_CLASSES": [
+        "rest_framework.permissions.DjangoModelPermissionsOrAnonReadOnly"
+    ]
+}
 
 TEMPLATES = [
     {
