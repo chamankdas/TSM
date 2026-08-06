@@ -1,4 +1,4 @@
-from django.shortcuts import render,redirect,get_object_or_404,HttpResponse
+from django.shortcuts import render,redirect,get_object_or_404
 from django.contrib.auth import login,logout
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth import authenticate
@@ -20,50 +20,54 @@ def home(request):
 
 def user_login(request):
     if request.method == "POST":
-        username = request.POST.get('username')
+        email = request.POST.get('email')
         password = request.POST.get('password')
 
-        user = authenticate(request,username=username,password=password)
+        user = authenticate(request,email=email,password=password)
         
         if user is not None:
             login(request,user)
 
-            if user.role == "senior_agent":
-                return redirect("admin_dashboard")
-            elif user.role == "agent":
-                return redirect('agent_dashboard')
-            else:
-                return redirect('user_dashboard')
+            # if user.role == "senior_agent":
+            #     return redirect("admin_dashboard")
+            # elif user.role == "agent":
+            #     return redirect('agent_dashboard')
+            # else:
+            return redirect('user_dashboard')
         else:
-            return render(request,"registration/login.html",{'error': "Invalid username or password"})
+            return render(request,"registration/login.html",{'error': "Invalid email or password"})
 
     return render(request,"registration/login.html")
 
 def registration(request):
     if request.method == "POST":
-        username = request.POST.get('username')
+        email = request.POST.get('email')
         pass1 = request.POST.get('password1')
         pass2 = request.POST.get('password2')
-        role = request.POST.get('role')
+
+        print(email)
     
         if pass1==pass2:
-            exist_user = User.objects.filter(username=username).exists()
+            exist_user = CustomUser.objects.filter(email=email).exists()
             if exist_user:
                 return render(request,"registration/register.html",{'error':"Username is already taken"})
             
-            user = User()
-            user.username = username
+            user = CustomUser()
+            user.email = email
             user.set_password(pass1)
-            user.role = role
+            user.mobile = '9558885444'
+            user.full_name = f"user{email}"
+
+            print(f"second{email}")
 
             user.save()
 
             login(request,user)
 
-            if user.role =="agent":
-                return redirect('agent_dashboard')
-            else:
-                return redirect('user_dashboard')
+            # if user.role =="agent":
+            #     return redirect('agent_dashboard')
+            # else:
+            #     return redirect('user_dashboard')
 
     return render(request,"registration/register.html")
 
@@ -74,7 +78,7 @@ def user_logout(request):
         return redirect('homepage')
     
 @login_required
-@permission_check(role="customer")
+# @permission_check(role="customer")
 def user_dashboard(request):
     tickets = Ticket.objects.filter(created_by = request.user)
     comments = Comment.objects.filter(user = request.user)
@@ -103,7 +107,7 @@ def user_dashboard(request):
     return render(request,"user/dashboard.html",context)
 
 @login_required
-@permission_check(role="customer")
+# @permission_check(role="customer")
 def raise_ticket(request):
     if request.method == "POST":
         type =request.POST.get("type")
@@ -135,7 +139,7 @@ def raise_ticket(request):
     return render(request,"user/raised_ticket.html")
 
 @login_required
-@permission_check(role="customer")
+# @permission_check(role="customer")
 def view_ticket(request,id):
     ticket  = Ticket.objects.get(id=id,created_by = request.user)
     attachments = TicketAttachment.objects.filter(ticket= ticket)
@@ -160,7 +164,7 @@ def view_ticket(request,id):
     return render(request,"user/view_ticket.html",context)
 
 @login_required
-@permission_check(role="customer")
+# @permission_check(role="customer")
 def show_tickets(request):
     tickets = Ticket.objects.filter(created_by = request.user)
     open_tickets = tickets.filter(status="open").order_by("-created_at")
@@ -176,7 +180,7 @@ def show_tickets(request):
     return render(request,"user/all_ticket.html",context)
 
 @login_required
-@permission_check(role="customer")
+# @permission_check(role="customer")
 def comment(request,id):
     if request.method == "POST":
         ticket = Ticket.objects.get(id=id)

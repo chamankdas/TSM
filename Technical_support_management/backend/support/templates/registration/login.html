@@ -14,8 +14,8 @@
             <div class="mb-10">
                 <form action="{% url 'login' %}" method="post" class="flex flex-col py-5 bg-blue-400 px-5">
                     {% csrf_token %}
-                    <label for="username" class="text-sm font-semibold px-2 pb-1">Username</label>
-                    <input type="text" name="username" id="username" placeholder="Username" class="px-5 py-2 mb-3 rounded-lg outline-none">
+                    <label for="email" class="text-sm font-semibold px-2 pb-1">email</label>
+                    <input type="email" name="email" id="email" placeholder="email@email.com" class="px-5 py-2 mb-3 rounded-lg outline-none">
 
                     <label for="password" class="text-sm font-semibold px-2 pb-1">Password</label>
                     <input type="password" name="password" id="password" placeholder="Password" class="px-5 py-2 mb-3 rounded-lg outline-none">

@@ -4,8 +4,8 @@ chain==1.0
 charset-normalizer==3.4.9
 Django==6.0.7
 django-filter==26.1
-django-restframework==0.0.1
 django-widget-tweaks==1.5.1
+djangorestframework==3.17.2
 dotenv==0.9.9
 idna==3.18
 Markdown==3.10.3
